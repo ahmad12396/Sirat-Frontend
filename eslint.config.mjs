@@ -13,6 +13,25 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  {
+    rules: {
+      "no-restricted-properties": [
+        "error",
+        {
+          object: "process",
+          property: "env",
+          message:
+            "Do not access process.env directly — import { env } from '@/config/env' instead.",
+        },
+      ],
+    },
+  },
+  {
+    files: ["src/config/env.ts"],
+    rules: {
+      "no-restricted-properties": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;
