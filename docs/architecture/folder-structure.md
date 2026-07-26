@@ -50,9 +50,29 @@ components/
 ├── navigation/    menu/, breadcrumbs/, tabs/, pagination/ + index.ts
 │                  (composed nav usage — distinct from the bare `ui/tabs`
 │                  and `ui/pagination` primitives)
+├── overlays/      app-specific overlay compositions (e.g. a
+│                  ConfirmDeleteDialog, QuranSettingsSheet) built on top of
+│                  `ui/dialog` / `ui/drawer` / `ui/popover` — distinct from
+│                  those bare primitives, which have no app knowledge
+├── skeletons/     feature-specific loading skeletons (e.g.
+│                  SurahListSkeleton, HadithCardSkeleton) composed from
+│                  `ui/skeleton` — distinct from that bare primitive
+├── typography/    app-specific text components (e.g. ArabicText, AyahText,
+│                  Heading) built on top of `ui/typography` — distinct from
+│                  that bare primitive
 ├── charts/, animations/, common/    scaffolded, not yet subdivided
-└── index.ts       top barrel — re-exports ui/layout/forms/feedback/navigation
+└── index.ts       top barrel — re-exports every category above
 ```
+
+**`ui/` vs `overlays/`, `skeletons/`, `typography/`**: this is an atoms vs.
+molecules split, not duplication. `ui/dialog`, `ui/skeleton`, `ui/typography`
+are bare, app-agnostic primitives (could be copy-pasted into any project).
+`overlays/`, `skeletons/`, `typography/` hold this app's _compositions_ of
+those primitives — components that know about Sirat's domain (an ayah, a
+surah, a hadith) or product conventions, but are still cross-feature
+(reused by more than one `features/<name>/`). If a component only makes
+sense for one feature, it belongs inside that feature's folder instead —
+see `components/` vs `features/` below.
 
 - **One component = one folder** (`ui/button/button.tsx` + `ui/button/index.ts`
   re-exporting it), even before it has variants/sub-parts — this keeps every
