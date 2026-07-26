@@ -1,0 +1,109 @@
+name: CI
+
+"on":
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  # NEXT_PUBLIC_* values are not secret; these are placeholder build-time
+  # values so `next build` and the test suite have a valid env.ts config.
+  # No repository variables are configured yet (see docs/deployment/README.md
+  # — deployment target undecided) — swap these for `vars.NEXT_PUBLIC_*`
+  # once real ones exist.
+  NEXT_PUBLIC_APP_URL: http://localhost:3000
+  NEXT_PUBLIC_API_URL: http://localhost:3000/api
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+
+  typecheck:
+    name: Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: [lint, typecheck]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run test
+
+  coverage:
+    name: Coverage
+    runs-on: ubuntu-latest
+    needs: [unit-tests]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run test:coverage
+      - uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 14
+
+  security-audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      # Gated at `critical` rather than `high`: current known advisories
+      # (shadcn CLI's bundled MCP/Hono, ESLint's minimatch, a postcss copy
+      # nested inside Next's own tooling) are all transitive dev/build-tool
+      # dependencies with no fix available except a breaking downgrade of
+      # Next/ESLint/shadcn themselves — see docs/security/README.md. Revisit
+      # this threshold once upstream fixes land.
+      - run: npm audit --audit-level=critical

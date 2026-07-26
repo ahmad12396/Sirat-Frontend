@@ -34,11 +34,14 @@ This is the project's internal wiki. Start here.
   accessibility, content/tone, PR checklist.
 - **[decisions/](./decisions/README.md)** — ADR log: significant technical
   decisions and why they were made.
+- **[deployment/](./deployment/README.md)** — CI/CD status: branch →
+  environment mapping (dev/uat/production), Vercel setup checklist, and
+  what's still unprovisioned (secrets/projects).
 
 ## Not Yet Written
 
-`docs/database/`, `docs/deployment/`, `docs/roadmap/` are scaffolded but
-empty — fill in as those areas take shape.
+`docs/database/`, `docs/roadmap/` are scaffolded but empty — fill in as
+those areas take shape.
 
 ## Keeping This Wiki Alive
 

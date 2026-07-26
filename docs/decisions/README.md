@@ -29,13 +29,14 @@ settle on their own.
 
 ## Index
 
-| ADR                                              | Title                                                         | Status   |
-| ------------------------------------------------ | ------------------------------------------------------------- | -------- |
-| [0001](./0001-src-directory-layout.md)           | Adopt `src/` directory layout                                 | Accepted |
-| [0002](./0002-eslint-flat-config.md)             | Keep ESLint flat config over legacy `.eslintrc`               | Accepted |
-| [0003](./0003-tailwind-v4-css-config.md)         | Stay CSS-based for Tailwind v4 config                         | Accepted |
-| [0004](./0004-centralized-api-layer.md)          | Centralize all HTTP access behind `src/lib/api`               | Accepted |
-| [0005](./0005-centralized-error-handling.md)     | Normalize all errors into a single `AppError` type            | Accepted |
-| [0006](./0006-env-validation-with-zod.md)        | Validate environment variables with Zod at startup            | Accepted |
-| [0007](./0007-conventional-commits.md)           | Enforce Conventional Commits via commitlint + Husky           | Accepted |
-| [0008](./0008-dark-mode-glassmorphism-design.md) | Adopt dark-mode-default, glassmorphism-accented design system | Accepted |
+| ADR                                              | Title                                                          | Status   |
+| ------------------------------------------------ | -------------------------------------------------------------- | -------- |
+| [0001](./0001-src-directory-layout.md)           | Adopt `src/` directory layout                                  | Accepted |
+| [0002](./0002-eslint-flat-config.md)             | Keep ESLint flat config over legacy `.eslintrc`                | Accepted |
+| [0003](./0003-tailwind-v4-css-config.md)         | Stay CSS-based for Tailwind v4 config                          | Accepted |
+| [0004](./0004-centralized-api-layer.md)          | Centralize all HTTP access behind `src/lib/api`                | Accepted |
+| [0005](./0005-centralized-error-handling.md)     | Normalize all errors into a single `AppError` type             | Accepted |
+| [0006](./0006-env-validation-with-zod.md)        | Validate environment variables with Zod at startup             | Accepted |
+| [0007](./0007-conventional-commits.md)           | Enforce Conventional Commits via commitlint + Husky            | Accepted |
+| [0008](./0008-dark-mode-glassmorphism-design.md) | Adopt dark-mode-default, glassmorphism-accented design system  | Accepted |
+| [0009](./0009-git-branching-and-environments.md) | Git branching model + environment mapping (dev/uat/production) | Accepted |

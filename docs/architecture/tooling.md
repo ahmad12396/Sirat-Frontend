@@ -59,3 +59,32 @@ Checked in so every contributor gets the same setup without manual config:
 If you change a shared convention (formatter, lint rule, editor setting),
 update the corresponding `.vscode/` file in the same PR so it applies to
 everyone, not just your machine.
+
+## CI/CD (`.github/workflows/`)
+
+Full status and rationale in [docs/deployment/README.md](../deployment/README.md).
+Summary:
+
+- **`ci.yml`** — Lint, Type Check, Build, Unit Tests, Coverage (uploaded
+  as a build artifact), and a Security Audit job on every push/PR to
+  `main`. The audit is gated at `--audit-level=critical`, not `high` —
+  see the comment in the workflow file for why (known, unfixable
+  dev-tooling advisories; tighten this once upstream fixes land).
+- **`code-quality.yml`** — Prettier check, ESLint, a Dependency Review
+  (PR-only, fails on newly-introduced high-severity dependencies), and a
+  secret scan (`gitleaks`) on every push/PR to `main`.
+- **`pr-validation.yml`** — checks the PR title and every commit in the
+  PR against Conventional Commits — a CI-side backstop for the local
+  Husky `commit-msg` hook ([ADR-0007](../decisions/0007-conventional-commits.md)),
+  since that hook can be bypassed with `--no-verify`.
+- **`deploy.yml`** — the Deployment Pipeline. `feature/* → develop →
+release/vX.Y.Z → main` maps to `dev.sirat.app → uat.sirat.app →
+sirat.app` (Vercel), gated by a `verify` job (lint/typecheck/test/build)
+  on every push. See [ADR-0009](../decisions/0009-git-branching-and-environments.md)
+  and [docs/deployment/README.md](../deployment/README.md) — the
+  workflow is written but the Vercel projects/secrets aren't provisioned
+  yet, so it won't run successfully until that's done.
+- **Release Pipeline** is branch-driven, not a separate automated tool —
+  cutting a `release/vX.Y.Z` branch _is_ the versioning act. See
+  [ADR-0009](../decisions/0009-git-branching-and-environments.md) for why
+  `semantic-release`/`changesets` wasn't adopted.
